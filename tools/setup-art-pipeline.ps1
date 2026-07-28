@@ -1,3 +1,7 @@
+param(
+    [switch]$NonInteractive
+)
+
 $ErrorActionPreference = "Stop"
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
@@ -10,32 +14,35 @@ Write-Host ""
 # 1. Git LFS
 $git = Get-Command git -ErrorAction SilentlyContinue
 if (-not $git) {
-    Write-Warning "未检测到 Git。请先安装 Git for Windows，再重新运行本脚本。"
+    Write-Warning "未检测到 Git。请先安装 Git，再重新运行本脚本。"
 } else {
-    try {
-        git lfs version | Out-Null
-        git lfs install --local | Out-Null
+    git lfs version *> $null
+    if ($LASTEXITCODE -eq 0) {
+        git lfs install --local *> $null
+        if ($LASTEXITCODE -ne 0) {
+            throw "Git LFS 已安装，但无法在当前仓库初始化。"
+        }
         Write-Host "[完成] Git LFS 已在当前仓库启用。" -ForegroundColor Green
-    } catch {
+    } else {
         Write-Warning "已检测到 Git，但没有可用的 Git LFS。请安装 Git LFS 后运行：git lfs install"
     }
 }
 
 # 2. Asset folders
 $directories = @(
-    "assets\characters\source",
-    "assets\characters\exports",
-    "assets\characters\textures",
-    "assets\characters\animations",
-    "assets\environment\school\source",
-    "assets\environment\school\modules",
-    "assets\environment\school\props",
-    "assets\environment\school\textures",
-    "assets\environment\school\exports",
-    "assets\environment\shared",
-    "assets\audio",
-    "assets\reference",
-    "assets\licenses"
+    "assets/characters/source",
+    "assets/characters/exports",
+    "assets/characters/textures",
+    "assets/characters/animations",
+    "assets/environment/school/source",
+    "assets/environment/school/modules",
+    "assets/environment/school/props",
+    "assets/environment/school/textures",
+    "assets/environment/school/exports",
+    "assets/environment/shared",
+    "assets/audio",
+    "assets/reference",
+    "assets/licenses"
 )
 
 foreach ($relativePath in $directories) {
@@ -69,8 +76,8 @@ if ($blenderPath) {
 
 # 4. Required project docs
 $requiredFiles = @(
-    "docs\REALISTIC_ASSETS_PIPELINE.zh-CN.md",
-    "assets\ASSET_REGISTER.md",
+    "docs/REALISTIC_ASSETS_PIPELINE.zh-CN.md",
+    "assets/ASSET_REGISTER.md",
     ".gitattributes"
 )
 
@@ -84,13 +91,15 @@ Write-Host "[完成] 写实资产流程、授权登记表和 LFS 规则均存在
 
 Write-Host ""
 Write-Host "下一步：" -ForegroundColor Yellow
-Write-Host "1. 阅读 docs\REALISTIC_ASSETS_PIPELINE.zh-CN.md"
-Write-Host "2. 制作或下载素材后，先填写 assets\ASSET_REGISTER.md"
+Write-Host "1. 阅读 docs/REALISTIC_ASSETS_PIPELINE.zh-CN.md"
+Write-Host "2. 制作或下载素材后，先填写 assets/ASSET_REGISTER.md"
 Write-Host "3. Blender 源文件放入 source，导出的 .glb 放入 exports"
 Write-Host "4. 在 Godot 中为导入模型创建继承场景，不直接修改导入场景"
 Write-Host ""
 
-$openDocs = Read-Host "是否现在打开写实资产流程文档？(Y/N)"
-if ($openDocs -match '^[Yy]$') {
-    Start-Process (Join-Path $root "docs\REALISTIC_ASSETS_PIPELINE.zh-CN.md")
+if (-not $NonInteractive) {
+    $openDocs = Read-Host "是否现在打开写实资产流程文档？(Y/N)"
+    if ($openDocs -match '^[Yy]$') {
+        Start-Process (Join-Path $root "docs/REALISTIC_ASSETS_PIPELINE.zh-CN.md")
+    }
 }
