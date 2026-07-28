@@ -32,4 +32,4 @@ func load_game() -> void:
 func reset_game() -> void:
     flags.clear()
     if FileAccess.file_exists(SAVE_PATH):
-        DirAccess.remove_absolute(SAVE_PATH)
+        DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
