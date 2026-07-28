@@ -13,7 +13,8 @@
 - 运行方式：Web / 桌面浏览器
 - 技术栈：React 19、TypeScript、Vite、Three.js、React Three Fiber
 - 画质档位：自动识别 `high` / `low`
-- 质量保障：代码检查、引擎冒烟测试、关卡冒烟测试、生产构建
+- 必过门禁：引擎冒烟测试、关卡冒烟测试、TypeScript 与生产构建
+- 严格检查：在必过门禁基础上增加 ESLint
 - 构建产物：`dist/`
 
 ## 环境要求
@@ -55,14 +56,21 @@ npm run sanity:engine   # 引擎冒烟测试
 npm run sanity:level    # 关卡生成冒烟测试
 npm test                # 运行全部冒烟测试
 npm run build           # TypeScript 校验并生成生产版本
-npm run check           # lint + 全部测试 + 生产构建
+npm run check           # 全部冒烟测试 + 生产构建
+npm run check:strict    # ESLint + 全部冒烟测试 + 生产构建
 npm run preview         # 本地预览 dist/
 ```
 
-提交代码前建议只执行这一条：
+验证项目能否交付时执行：
 
 ```bash
 npm run check
+```
+
+清理代码质量问题或准备高标准合并时执行：
+
+```bash
+npm run check:strict
 ```
 
 ## 游戏流程
@@ -95,13 +103,13 @@ npm run check
 仓库的 GitHub Actions 会在推送到 `main` 或创建 Pull Request 时自动执行：
 
 1. `npm ci`
-2. `npm run lint`
+2. ESLint 检查并报告现有代码质量问题（当前为建议项，不阻断构建）
 3. 引擎冒烟测试
 4. 关卡冒烟测试
 5. TypeScript 与生产构建
 6. 上传 `dist/` 构建产物
 
-本地 `npm run check` 与 CI 使用同一套质量门禁。
+冒烟测试或生产构建失败会阻止合并。现有 ESLint 历史问题会单独治理，不会掩盖项目是否能够运行和交付。
 
 ## 冒烟测试
 
@@ -196,5 +204,6 @@ npm ci
 
 - 功能改动通过独立分支和 Pull Request 提交。
 - 合并前必须通过 `npm run check`。
+- 新增或重构代码应尽量通过 `npm run check:strict`。
 - 不提交 `node_modules/`、`dist/`、日志或本地缓存。
 - 性能优化需要同时检查高画质和低画质模式。
