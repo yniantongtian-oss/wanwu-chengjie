@@ -31,8 +31,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run full quality gate
-        run: npm run check
+      - name: Lint
+        run: npm run lint
+
+      - name: Engine sanity test
+        run: npm run sanity:engine
+
+      - name: Level sanity test
+        run: npm run sanity:level
+
+      - name: Production build
+        run: npm run build
 
       - name: Upload production build
         if: success()
