@@ -3,6 +3,8 @@ name: Godot Smoke Test
 on:
   push:
     branches: [godot-campus-horror-starter]
+  pull_request:
+    branches: [godot-campus-horror-starter]
   workflow_dispatch:
 
 permissions:
