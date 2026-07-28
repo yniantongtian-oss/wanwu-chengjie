@@ -28,7 +28,19 @@ jobs:
           chmod +x /tmp/godot/Godot_v4.3-stable_linux.x86_64
 
       - name: Import and parse project
-        run: /tmp/godot/Godot_v4.3-stable_linux.x86_64 --headless --editor --path . --quit-after 5
+        run: |
+          /tmp/godot/Godot_v4.3-stable_linux.x86_64 \
+            --headless --editor --path . --quit-after 5 2>&1 | tee /tmp/godot-import.log
+          if grep -E "SCRIPT ERROR|Parse Error|Failed loading resource|Cannot open file" /tmp/godot-import.log; then
+            echo "Godot import log contains a critical error."
+            exit 1
+          fi
 
       - name: Run main scene for 120 frames
-        run: /tmp/godot/Godot_v4.3-stable_linux.x86_64 --headless --path . --quit-after 120
+        run: |
+          /tmp/godot/Godot_v4.3-stable_linux.x86_64 \
+            --headless --path . --quit-after 120 2>&1 | tee /tmp/godot-runtime.log
+          if grep -E "SCRIPT ERROR|Parse Error|Failed loading resource|Cannot open file" /tmp/godot-runtime.log; then
+            echo "Godot runtime log contains a critical error."
+            exit 1
+          fi
