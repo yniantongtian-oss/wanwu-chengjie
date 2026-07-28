@@ -19,6 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate art pipeline setup
+        shell: pwsh
+        run: ./tools/setup-art-pipeline.ps1 -NonInteractive
+
       - name: Download Godot 4.3 stable
         run: |
           curl -L --fail --retry 3 \
