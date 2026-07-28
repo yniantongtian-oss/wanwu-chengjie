@@ -13,6 +13,9 @@
 - JSON 状态存档
 - 纯基础几何体测试关卡，不依赖外部美术资源
 - Windows 一键下载 Godot 并打开项目
+- 写实人物与 3D 校园楼宇制作流程
+- 大型 3D 资产 Git LFS 规则
+- 第三方素材来源和授权登记表
 
 ## Windows 直接启动
 
@@ -31,6 +34,37 @@ Set-ExecutionPolicy -Scope Process Bypass
 ```
 
 脚本会从 Godot 官方 GitHub Release 下载最新稳定版 Windows 编辑器到 `.tools/godot/`，随后打开本项目。
+
+## 初始化写实美术管线
+
+双击：
+
+```text
+setup-art-pipeline.bat
+```
+
+它会：
+
+1. 检查 Git 和 Git LFS；
+2. 在当前仓库启用 Git LFS；
+3. 创建人物、动画、楼宇、道具、贴图、音频和授权目录；
+4. 检查 Blender 是否已安装；
+5. 检查写实资产流程文档、授权登记表和 LFS 规则是否完整。
+
+完整制作流程：
+
+- [`docs/REALISTIC_ASSETS_PIPELINE.zh-CN.md`](docs/REALISTIC_ASSETS_PIPELINE.zh-CN.md)
+- [`assets/README.md`](assets/README.md)
+- [`assets/ASSET_REGISTER.md`](assets/ASSET_REGISTER.md)
+
+推荐路线：
+
+```text
+人物：MakeHuman/MPFB → Blender 清理 → Mixamo 或 Rigify → GLB → Godot
+楼宇：Godot 灰盒 → Blender 模块化建模 → PBR 材质 → 分区 GLB → Godot 灯光/碰撞/导航
+```
+
+所有下载素材必须先登记许可证。不要使用其他游戏提取物、来源不明网盘素材或未经授权的真人肖像。
 
 ## 操作
 
@@ -58,4 +92,9 @@ Set-ExecutionPolicy -Scope Process Bypass
 
 ## 下一步建议
 
-正式开发时依次补充：校园灰盒关卡、柜子躲藏、声音感知 AI、事件触发器、剧情对话、物品栏、检查点、正式模型、动画与音频。
+1. 先完成一层走廊、两间教室、厕所、楼梯和地下室的灰盒。
+2. 制作或导入一个可动画的人体，替换当前胶囊女鬼。
+3. 建立墙、门、窗、楼梯和栏杆模块化套件。
+4. 加入柜子躲藏、声音感知 AI、恐怖事件和剧情对话。
+5. 完成碰撞、导航、LOD、遮挡剔除与性能分级。
+6. 使用正式模型、动画、音频和灯光完成 10～15 分钟 Demo。
