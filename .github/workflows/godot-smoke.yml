@@ -1,0 +1,23 @@
+name: Godot Smoke Test
+
+on:
+  push:
+    branches: [godot-campus-horror-starter]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Import and parse project
+        run: godot --headless --editor --path . --quit-after 5
