@@ -29,3 +29,6 @@ jobs:
 
       - name: Import and parse project
         run: /tmp/godot/Godot_v4.3-stable_linux.x86_64 --headless --editor --path . --quit-after 5
+
+      - name: Run main scene for 120 frames
+        run: /tmp/godot/Godot_v4.3-stable_linux.x86_64 --headless --path . --quit-after 120
