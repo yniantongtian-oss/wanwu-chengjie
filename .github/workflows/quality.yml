@@ -31,8 +31,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint (advisory)
-        continue-on-error: true
+      - name: Lint
         run: npm run lint
 
       - name: Engine sanity test

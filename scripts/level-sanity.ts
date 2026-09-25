@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // 关卡生成冒烟测试（esbuild 打包后由 node 运行）
 // 校验：全部地形 × 多种子下，出生点/出口/碎片/节点可达，数值无 NaN。
 import { createDefaultDNA, TERRAINS } from '../src/engine';
