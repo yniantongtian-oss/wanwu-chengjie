@@ -1,209 +1,109 @@
-# 万物成界
+# World Builder
 
-> 拍下任何东西，然后进入它的世界。
+A short-form interactive world generator. Start with a brief text concept, three emoji, or a photo and enter a **60–90 second 3D challenge**:
 
-输入一段话、三个表情或一张照片，系统会生成一个 **60–90 秒的 3D 异世界挑战**：
+**Explore → Collect → World transformation → Boss pursuit → Activate nodes → Exit portal**
 
-**观察 → 收集 → 世界突变 → Boss 追逐 → 点亮节点 → 穿越出口**
+## Status
 
-## 项目状态
+This is a buildable, actively developed web application, not merely a static concept page.
 
-这是可继续开发和构建的正式版工程，不是静态概念稿。
+- Runtime: modern desktop and mobile browsers with WebGL
+- Stack: React 19, TypeScript, Vite, Three.js, React Three Fiber
+- Render tiers: automatically selected `high` and `low`
+- Required gates: engine smoke tests, level-generation smoke tests, TypeScript checks, production build
+- Extended gate: ESLint in addition to the required checks
+- Output: `dist/`
 
-- 运行方式：Web / 桌面浏览器
-- 技术栈：React 19、TypeScript、Vite、Three.js、React Three Fiber
-- 画质档位：自动识别 `high` / `low`
-- 必过门禁：引擎冒烟测试、关卡冒烟测试、TypeScript 与生产构建
-- 严格检查：在必过门禁基础上增加 ESLint
-- 构建产物：`dist/`
+## Requirements
 
-## 环境要求
-
-- Node.js 22（仓库已提供 `.nvmrc`）
-- npm 10 或更高版本
-- 支持 WebGL 的现代浏览器
-
-使用 nvm 时：
+- Node.js 22 (see `.nvmrc`)
+- npm 10 or newer
+- A modern browser with WebGL support
 
 ```bash
 nvm use
-```
-
-## 快速开始
-
-```bash
 git clone https://github.com/yniantongtian-oss/wanwu-chengjie.git
 cd wanwu-chengjie
 npm ci
 npm run dev
 ```
 
-Vite 启动后会在终端显示本地访问地址。
+The development server prints its local URL. Dependency installation may require an available npm registry.
 
-国内网络安装较慢时，可临时使用镜像：
-
-```bash
-npm config set registry https://registry.npmmirror.com
-npm ci
-```
-
-## 常用命令
+## Development commands
 
 ```bash
-npm run dev             # 启动开发服务器
-npm run lint            # ESLint 检查
-npm run sanity:engine   # 引擎冒烟测试
-npm run sanity:level    # 关卡生成冒烟测试
-npm test                # 运行全部冒烟测试
-npm run build           # TypeScript 校验并生成生产版本
-npm run check           # 全部冒烟测试 + 生产构建
-npm run check:strict    # ESLint + 全部冒烟测试 + 生产构建
-npm run preview         # 本地预览 dist/
-```
-
-验证项目能否交付时执行：
-
-```bash
+npm run dev
+npm run lint
+npm run sanity:engine
+npm run sanity:level
+npm test
+npm run build
 npm run check
-```
-
-清理代码质量问题或准备高标准合并时执行：
-
-```bash
 npm run check:strict
+npm run preview
 ```
 
-## 游戏流程
+Use `npm run check` for the required smoke-test and production-build gate. `npm run check:strict` additionally enforces ESLint.
 
-1. 输入文本、表情或图片，生成世界主题。
-2. 进入场景并观察环境提示。
-3. 收集记忆晶体碎片。
-4. 触发世界突变与 Boss 追逐。
-5. 激活能量节点。
-6. 打开传送门并完成挑战。
+## Gameplay loop
 
-## 画质与兼容性
+1. Supply a text idea, emoji, or an image to establish the world theme.
+2. Explore the generated scene and read environmental cues.
+3. Collect memory-crystal fragments.
+4. Trigger world transformation and a boss pursuit sequence.
+5. Activate energy nodes.
+6. Reach the portal and complete the challenge.
 
-系统会根据设备能力自动选择画质：
+## Graphics and compatibility
 
-- 低核心数、软件渲染或 Intel 非 Arc 核显：默认 `low`
-- 其他设备：默认 `high`
+The application selects quality tiers based on device capability. Limited-core devices, software rendering, and certain older integrated GPUs default to `low`; other supported devices may use `high`.
 
-也可手动覆盖：
+Force a render tier when testing:
 
 ```text
 /play/:id?q=high
 /play/:id?q=low
 ```
 
-运行中若持续低帧，帧率看门狗会自动关闭泛光并将渲染分辨率降低到 1x，不会中断当前对局。
+If the frame-rate watchdog detects sustained poor performance, it disables bloom and reduces the render scale to 1x without interrupting the session.
 
-## 自动质量检查
+## Automated checks
 
-仓库的 GitHub Actions 会在推送到 `main` 或创建 Pull Request 时自动执行：
+GitHub Actions validates pull requests and pushes to `main` with dependency installation, engine and level-generation checks, TypeScript compilation, and a production build. It also reports historical lint issues separately. Required smoke or build failures block successful validation.
 
-1. `npm ci`
-2. ESLint 检查并报告现有代码质量问题（当前为建议项，不阻断构建）
-3. 引擎冒烟测试
-4. 关卡冒烟测试
-5. TypeScript 与生产构建
-6. 上传 `dist/` 构建产物
+The engine and level-generation smoke tests contain more than 150 assertions. These are synthetic software checks, not a substitute for performance and usability testing on physical devices.
 
-冒烟测试或生产构建失败会阻止合并。现有 ESLint 历史问题会单独治理，不会掩盖项目是否能够运行和交付。
+## Visual and gameplay improvements
 
-## 冒烟测试
+- Rebuilt memory crystals, energy obelisks, rune portals, six boss variants, and the player core.
+- Added layered terrain shading, illuminated paths, floating islands, and decorative crystal clusters.
+- Added a dual-tone sky, nebula, two moons, aurora effects, and an eclipse corona.
+- Expanded modular buildings and scene diversity from 14 to 18 scene types.
+- Added bloom, FXAA, dynamic shadows, and vignette effects to the high tier.
+- Added event particles, landing effects, ripple feedback, jumping audio, and portal transitions.
+- Adjusted sprint movement by 18% with coordinated camera field-of-view response.
+- Fixed invalid boss spawn locations and buried collectibles in floating-island scenes.
+- Reduced per-frame allocations by sharing frequently used temporary vectors.
 
-当前冒烟测试覆盖引擎与关卡生成，共计 150+ 条断言。
-
-需要单独调试时：
-
-```bash
-npm run sanity:engine
-npm run sanity:level
-```
-
-## 生产构建
+## Production deployment
 
 ```bash
 npm run build
 npm run preview
 ```
 
-可部署目录为：
+Deploy the `dist/` directory to a static hosting provider. Configure the host to fall back to `index.html` for client-side routes.
 
-```text
-dist/
-```
+## Troubleshooting
 
-任何支持静态站点的服务均可托管该目录。部署时需要确保 SPA 路由回退到 `index.html`。
+**Install errors:** confirm `node -v` and `npm -v`; remove `node_modules` and run `npm ci` again.
 
-## 已完成的正式版优化
+**Graphics artifacts or low performance:** try `?q=low` and enable hardware acceleration in the browser.
 
-### 建模与画面
+**404 on refresh:** configure the static server to rewrite unknown SPA routes to `index.html`.
 
-- 记忆晶体碎片、能量方尖塔、符文传送门、六形态 Boss 与玩家灵核全部重做。
-- 地形加入顶点色高度渐变、主路径微光、噪声斑驳、浮岛分层岩体和装饰晶簇。
-- 天空加入双色渐变天穹、星云、双月辉光、极光波动和蚀环日冕。
-- 12 种建筑模块精细化，场景数量由 14 个提升至 18 个。
-- 高画质模式启用 UnrealBloom、FXAA、动态阴影与氛围暗角。
+## Contribution standards
 
-### 反馈与手感
-
-- 收集、节点激活、Boss 解体和传送门开启均有事件粒子与冲击环。
-- 加入落地尘埃、涟漪、跳跃音效和落地音效。
-- 冲刺阶段移动速度提高 18%，同时推进视野角度。
-
-### 修复与性能
-
-- 修复浮岛世界 Boss 出生点落入虚空。
-- 修复碎片被相邻高岛掩埋。
-- 修复 `skyBottom` 定义后未使用。
-- 相机更新实现每帧零分配。
-- 临时向量改为模块级共享，减少垃圾回收压力。
-
-## 常见问题
-
-### 安装依赖失败
-
-先确认 Node.js 版本：
-
-```bash
-node -v
-npm -v
-```
-
-然后清理并重新安装：
-
-```bash
-rm -rf node_modules
-npm ci
-```
-
-Windows PowerShell 可使用：
-
-```powershell
-Remove-Item node_modules -Recurse -Force
-npm ci
-```
-
-### 页面能打开但画面异常
-
-尝试低画质模式：
-
-```text
-?q=low
-```
-
-并检查浏览器是否启用了硬件加速。
-
-### 刷新子页面后出现 404
-
-这是静态服务器没有配置 SPA 回退。将所有未知路径重写到 `index.html`。
-
-## 开发约定
-
-- 功能改动通过独立分支和 Pull Request 提交。
-- 合并前必须通过 `npm run check`。
-- 新增或重构代码应尽量通过 `npm run check:strict`。
-- 不提交 `node_modules/`、`dist/`、日志或本地缓存。
-- 性能优化需要同时检查高画质和低画质模式。
+Develop features on a separate branch and validate with `npm run check` before merging. Aim to pass `npm run check:strict` for new or refactored code. Do not commit build output, dependency directories, logs, or caches. Check both visual quality tiers when changing performance-sensitive code.
